@@ -4683,6 +4683,24 @@ jobs:
           echo "::warning::Buildkite pipeline did not pass: ${{ needs.buildkite-heads-trigger.outputs.url }}"
           exit 1
 
+  helm-test:
+    name: Run unit tests for helm chart
+    runs-on: ubuntu-latest
+    outputs:
+      check: ${{ steps.unittest.outputs.check }}
+
+    steps:
+      - name: Run Helm unittest
+        id: unittest
+        run: |
+          helm plugin install https://github.com/helm-unittest/helm-unittest.git 
+          helm unittest docker/helm
+          if [ $? -eq 0 ]; then
+            echo "check=true" >> $GITHUB_OUTPUT
+          else
+            echo "check=false" >> $GITHUB_OUTPUT
+          fi
+
   docker-config:
     name: Configure docker build
     needs: [init-workflow, build-and-test, buildkite]

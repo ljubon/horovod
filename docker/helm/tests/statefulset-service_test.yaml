@@ -1,0 +1,25 @@
+---
+suite: Statefulset Service template
+templates:
+  - statefulset-service.yaml
+values:
+  - ../values.yaml
+  - test_values.yaml
+release:
+  name: horovod
+tests:
+  - it: Statefulset Service verification
+    asserts:
+      - notFailedTemplate: {}
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+      - equal:
+          path: metadata.name
+          value: horovod
+      - equal:
+          path: spec.ports[0].name
+          value: ssh
+      - exists:
+          path: spec.selector.role
+          

@@ -1,0 +1,26 @@
+---
+suite: Job template
+templates:
+  - job.yaml
+values:
+  - ../values.yaml
+  - test_values.yaml
+release:
+  name: horovod
+tests:
+  - it: Job verification
+    asserts:
+      - notFailedTemplate: {}
+      - containsDocument:
+          kind: Job
+          apiVersion: batch/v1
+      - equal:
+          path: metadata.name
+          value: horovod
+      - matchRegex:
+          path: spec.template.spec.containers[0].image
+          pattern: ^horovod/horovod
+      - exists:
+          path: metadata.labels.role
+      - exists:
+          path: spec.template.metadata.labels.role

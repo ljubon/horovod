@@ -20,4 +20,5 @@ horovod/tensorflow/mpi_lib.so
 horovod/torch/test_cuda/
 lightning_logs
 
+docker/helm/tests/__snapshot__
 

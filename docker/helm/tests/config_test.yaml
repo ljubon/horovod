@@ -1,0 +1,18 @@
+---
+suite: Config template
+templates:
+  - config.yaml
+values:
+  - ../values.yaml
+  - test_values.yaml
+release:
+  name: horovod
+tests:
+  - it: Config verification
+    asserts:
+      - notFailedTemplate: {}
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+      - isNotNullOrEmpty:
+          path: data

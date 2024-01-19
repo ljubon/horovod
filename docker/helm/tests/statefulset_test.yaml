@@ -1,0 +1,30 @@
+---
+suite: Statefulset template
+templates:
+  - statefulset.yaml
+values:
+  - ../values.yaml
+  - test_values.yaml
+release:
+  name: horovod
+tests:
+  - it: Statefulset Service verification
+    asserts:
+      - notFailedTemplate: {}
+      - containsDocument:
+          kind: StatefulSet
+          apiVersion: apps/v1
+      - equal:
+          path: metadata.name
+          value: horovod
+      - exists:
+          path: metadata.labels.role
+      - exists:
+          path: spec.selector.matchLabels.role
+      - exists:
+          path: spec.template.metadata.labels.role
+      - isNotNullOrEmpty:
+          path: spec.template.spec.volumes
+      - isNotNullOrEmpty:
+          path: spec.template.spec.containers
+          
